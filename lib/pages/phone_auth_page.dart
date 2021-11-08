@@ -1,7 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'package:todo_firebase/services/auth_service.dart';
 // import 'package:otp_text_field/otp_text_field.dart';
 // import 'package:otp_text_field/style.dart';
 
@@ -17,6 +17,10 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
   bool wait = false;
   bool msgVisibility = false;
   String sendText = 'Send';
+  String verificationIdFinal = '';
+  String smsCode = '';
+  TextEditingController phoneNumberController = TextEditingController();
+  final AuthClass _authClass = AuthClass();
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +28,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
       backgroundColor: Colors.black87,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Text(
+        title: const Text(
           'Sign Up',
           style: TextStyle(fontSize: 24, color: Colors.white),
         ),
@@ -36,27 +40,27 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: 150),
+              const SizedBox(height: 150),
               textItem(context),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               SizedBox(
                 width: MediaQuery.of(context).size.width - 50,
                 child: Row(
                   children: [
                     Expanded(
                       child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 10),
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
                         color: Colors.white,
                         height: 1,
                       ),
                     ),
-                    Text(
+                    const Text(
                       'Enter the 5 digit OTP',
                       style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                     Expanded(
                       child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 10),
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
                         color: Colors.white,
                         height: 1,
                       ),
@@ -64,9 +68,9 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                   ],
                 ),
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               otpField(context),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               Visibility(
                 visible: msgVisibility,
                 child: RichText(
@@ -75,36 +79,42 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                       TextSpan(
                         text: 'Send OTP again in ',
                         style: TextStyle(
-                            color: Colors.yellowAccent[100], fontSize: 16),
+                            color: Colors.blueGrey[300], fontSize: 16),
                       ),
                       TextSpan(
                         text: '00:$start',
                         style: TextStyle(
-                            color: Colors.purpleAccent[100], fontSize: 16),
+                            color: Colors.blueGrey[100], fontSize: 16),
                       ),
                       TextSpan(
                         text: ' sec',
                         style: TextStyle(
-                            color: Colors.yellowAccent[100], fontSize: 16),
+                            color: Colors.blueGrey[300], fontSize: 16),
                       ),
                     ],
                   ),
                 ),
               ),
-              SizedBox(height: 20),
-              Container(
-                height: 60,
-                width: MediaQuery.of(context).size.width - 60,
-                decoration: BoxDecoration(
-                    color: Colors.blueGrey,
-                    borderRadius: BorderRadius.circular(15)),
-                child: Center(
-                  child: Text(
-                    'Let\'s Go',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
+              const SizedBox(height: 20),
+              InkWell(
+                onTap: () {
+                  _authClass.signInWithPhoneNumber(
+                      verificationIdFinal, smsCode, context);
+                },
+                child: Container(
+                  height: 60,
+                  width: MediaQuery.of(context).size.width - 60,
+                  decoration: BoxDecoration(
+                      color: Colors.blueGrey,
+                      borderRadius: BorderRadius.circular(15)),
+                  child: const Center(
+                    child: Text(
+                      'Let\'s Go',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
               )
@@ -120,31 +130,39 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
       width: MediaQuery.of(context).size.width - 40,
       height: 60,
       decoration: BoxDecoration(
-        color: Color(0xff1d1d1d),
+        color: const Color(0xff1d1d1d),
         borderRadius: BorderRadius.circular(15),
       ),
       child: TextFormField(
+        style: const TextStyle(color: Colors.white),
+        controller: phoneNumberController,
         keyboardType: TextInputType.phone,
         decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(vertical: 19, horizontal: 8),
-            prefixIcon: Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 14.0, horizontal: 15),
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 19, horizontal: 8),
+            prefixIcon: const Padding(
+              padding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 15),
               child: Text(
                 ' (+91) ',
                 style: TextStyle(fontSize: 17, color: Colors.white),
               ),
             ),
             suffixIcon: wait
-                ? Transform.scale(scale: .5, child: CircularProgressIndicator())
+                ? Transform.scale(
+                    scale: .5, child: const CircularProgressIndicator())
                 : InkWell(
-                    onTap: startTimer,
+                    onTap: () async {
+                      await _authClass.verifyPhoneNumber(
+                          '+91 ${phoneNumberController.text}',
+                          context,
+                          setData);
+                    },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 14.0, horizontal: 13),
                       child: Text(
                         sendText,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 20,
                             color: Colors.white,
                             fontWeight: FontWeight.bold),
@@ -153,7 +171,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                   ),
             border: InputBorder.none,
             hintText: 'Enter your Phone number',
-            hintStyle: TextStyle(fontSize: 17, color: Colors.white70)),
+            hintStyle: const TextStyle(fontSize: 17, color: Colors.white70)),
       ),
     );
   }
@@ -185,12 +203,24 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
 
   Widget otpField(BuildContext context) {
     return OtpTextField(
-      numberOfFields: 5,
+      numberOfFields: 6,
       focusedBorderColor: Colors.grey,
       borderRadius: BorderRadius.circular(15),
-      borderColor: Color(0xFF512DA8),
-      textStyle: TextStyle(color: Colors.white),
+      borderColor: const Color(0xFF512DA8),
+      textStyle: const TextStyle(color: Colors.white),
       showFieldAsBox: true,
+      onSubmit: (String pin) {
+        setState(() {
+          smsCode = pin;
+        });
+      },
     );
+  }
+
+  void setData(verificationId) {
+    setState(() {
+      verificationIdFinal = verificationId;
+    });
+    startTimer();
   }
 }

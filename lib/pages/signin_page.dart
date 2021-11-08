@@ -42,10 +42,10 @@ class _SignInPageState extends State<SignInPage> {
                 _authClass.googleSignIn(context);
               }),
               const SizedBox(height: 15),
-              customButton(
-                  'assets/phone.svg', 'Continue with Phone', 30, () {Navigator.of(context).push(
-                    MaterialPageRoute(builder: (ctx) => PhoneAuthPage()))
-                    ;}),
+              customButton('assets/phone.svg', 'Continue with Phone', 30, () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (ctx) => const PhoneAuthPage()));
+              }),
               const SizedBox(height: 15),
               const Text(
                 'Or',
@@ -173,7 +173,6 @@ class _SignInPageState extends State<SignInPage> {
           });
           Navigator.pushAndRemoveUntil(
               context,
-              // TODO:Need to pass the user
               MaterialPageRoute(builder: (builder) => const HomePage()),
               (route) => false);
         } catch (e) {

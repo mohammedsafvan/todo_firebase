@@ -33,16 +33,13 @@ class AuthClass {
               MaterialPageRoute(builder: (builder) => const HomePage()),
               (route) => false);
         } catch (e) {
-          final snackBar = SnackBar(content: Text(e.toString()));
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          showSnackBar(context, e.toString());
         }
       } else {
-        const snackBar = SnackBar(content: Text('Not able to sign in'));
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        showSnackBar(context, 'Not able to sign in');
       }
     } catch (e) {
-      final snackBar = SnackBar(content: Text(e.toString()));
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      showSnackBar(context, e.toString());
     }
   }
 
@@ -65,8 +62,63 @@ class AuthClass {
       await _auth.signOut();
       await storage.delete(key: 'uid');
     } catch (e) {
-      final snackBar = SnackBar(content: Text(e.toString()));
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      showSnackBar(context, e.toString());
     }
+  }
+
+  Future<void> verifyPhoneNumber(
+      String phoneNumber, BuildContext context, Function setData) async {
+    PhoneVerificationCompleted verificationCompleted;
+    PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout;
+    PhoneVerificationFailed verificationFailed;
+    PhoneCodeSent codeSent;
+
+    verificationCompleted = (PhoneAuthCredential phoneAuthCredential) async =>
+        showSnackBar(context, "Verification Completed");
+
+    verificationFailed = (FirebaseAuthException exception) =>
+        showSnackBar(context, exception.toString());
+
+    codeSent = (String verificationId, [int? forceResendingToken]) {
+      showSnackBar(context, "Verification code sent");
+      setData(verificationId);
+    };
+
+    codeAutoRetrievalTimeout =
+        (String verificationId) => showSnackBar(context, "Time Out");
+
+    try {
+      await _auth.verifyPhoneNumber(
+        phoneNumber: phoneNumber,
+        verificationCompleted: verificationCompleted,
+        verificationFailed: verificationFailed,
+        codeSent: codeSent,
+        codeAutoRetrievalTimeout: codeAutoRetrievalTimeout,
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
+
+  Future<void> signInWithPhoneNumber(
+      String verificationId, String smsCode, BuildContext context) async {
+    try {
+      AuthCredential credential = PhoneAuthProvider.credential(
+          verificationId: verificationId, smsCode: smsCode);
+      UserCredential userCredential =
+          await _auth.signInWithCredential(credential);
+      storeUserData(userCredential);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (builder) => const HomePage()),
+          (route) => false);
+      showSnackBar(context, 'Logged In');
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
+
+  void showSnackBar(BuildContext context, String text) {
+    final snackBar = SnackBar(content: Text(text));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
