@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:todo_firebase/services/auth_service.dart';
+import 'phone_auth_page.dart';
 import 'home_page.dart';
+import 'package:todo_firebase/services/auth_service.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -42,7 +43,9 @@ class _SignInPageState extends State<SignInPage> {
               }),
               const SizedBox(height: 15),
               customButton(
-                  'assets/phone.svg', 'Continue with Phone', 30, () {}),
+                  'assets/phone.svg', 'Continue with Phone', 30, () {Navigator.of(context).push(
+                    MaterialPageRoute(builder: (ctx) => PhoneAuthPage()))
+                    ;}),
               const SizedBox(height: 15),
               const Text(
                 'Or',
