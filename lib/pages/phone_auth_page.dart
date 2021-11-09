@@ -2,8 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:todo_firebase/services/auth_service.dart';
-// import 'package:otp_text_field/otp_text_field.dart';
-// import 'package:otp_text_field/style.dart';
 
 class PhoneAuthPage extends StatefulWidget {
   const PhoneAuthPage({Key? key}) : super(key: key);
@@ -25,8 +23,10 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black87,
+      backgroundColor: const Color(0xff070024),
       appBar: AppBar(
+        elevation: 0,
+        
         backgroundColor: Colors.transparent,
         title: const Text(
           'Sign Up',
@@ -41,7 +41,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
           child: Column(
             children: [
               const SizedBox(height: 150),
-              textItem(context),
+              textField(context),
               const SizedBox(height: 30),
               SizedBox(
                 width: MediaQuery.of(context).size.width - 50,
@@ -105,14 +105,14 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                   height: 60,
                   width: MediaQuery.of(context).size.width - 60,
                   decoration: BoxDecoration(
-                      color: Colors.blueGrey,
+                      border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(15)),
                   child: const Center(
                     child: Text(
                       'Let\'s Go',
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: 16,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -125,16 +125,16 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
     );
   }
 
-  Widget textItem(BuildContext context) {
+  Widget textField(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width - 40,
       height: 60,
       decoration: BoxDecoration(
-        color: const Color(0xff1d1d1d),
+        color: const Color(0xff150b40),
         borderRadius: BorderRadius.circular(15),
       ),
       child: TextFormField(
-        style: const TextStyle(color: Colors.white),
+        style: const TextStyle(color: Colors.white, fontSize: 21),
         controller: phoneNumberController,
         keyboardType: TextInputType.phone,
         decoration: InputDecoration(
@@ -144,7 +144,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
               padding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 15),
               child: Text(
                 ' (+91) ',
-                style: TextStyle(fontSize: 17, color: Colors.white),
+                style: TextStyle(fontSize: 21, color: Colors.white),
               ),
             ),
             suffixIcon: wait

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todo_firebase/pages/signin_page.dart';
+import 'package:todo_firebase/pages/pages.dart';
 import 'package:todo_firebase/services/auth_service.dart';
 
 class HomePage extends StatefulWidget {

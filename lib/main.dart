@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:todo_firebase/pages/home_page.dart';
-import 'package:todo_firebase/pages/signup_page.dart';
+import 'package:todo_firebase/pages/pages.dart';
 import 'package:todo_firebase/services/auth_service.dart';
 
 void main() async {
@@ -44,7 +43,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'Todo firebase',
       theme: ThemeData(primarySwatch: Colors.grey),
-      home: currentPage,
+      home: AddTodoPage(),
     );
   }
 }
