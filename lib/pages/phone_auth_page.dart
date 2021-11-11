@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
-import 'package:todo_firebase/services/auth_service.dart';
+import '../services/auth_service.dart';
+import '../colors.dart';
 
 class PhoneAuthPage extends StatefulWidget {
   const PhoneAuthPage({Key? key}) : super(key: key);
@@ -23,7 +24,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff070024),
+      backgroundColor:darkBlue,
       appBar: AppBar(
         elevation: 0,
         
@@ -130,7 +131,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
       width: MediaQuery.of(context).size.width - 40,
       height: 60,
       decoration: BoxDecoration(
-        color: const Color(0xff150b40),
+        color: fieldBlue,
         borderRadius: BorderRadius.circular(15),
       ),
       child: TextFormField(

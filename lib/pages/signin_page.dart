@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:todo_firebase/widgets/widgets.dart';
-import 'package:todo_firebase/services/auth_service.dart';
+import '../widgets/widgets.dart';
+import '../services/auth_service.dart';
 import 'pages.dart';
 
 class SignInPage extends StatefulWidget {
@@ -17,7 +17,6 @@ class _SignInPageState extends State<SignInPage> {
   final TextEditingController _passwordController = TextEditingController();
   final AuthClass _authClass = AuthClass();
   bool isLoading = false;
-  Color buttonColor = Color(0xff070024);
 
   @override
   Widget build(BuildContext context) {

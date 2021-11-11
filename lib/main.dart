@@ -43,7 +43,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'Todo firebase',
       theme: ThemeData(primarySwatch: Colors.grey),
-      home: AddTodoPage(),
+      home: currentPage,
     );
   }
 }

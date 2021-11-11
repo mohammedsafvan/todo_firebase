@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:todo_firebase/widgets/widgets.dart';
-import 'package:todo_firebase/services/auth_service.dart';
+import '../colors.dart';
+import '../widgets/widgets.dart';
+import '../services/auth_service.dart';
 import 'pages.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -25,7 +26,7 @@ class _SignUpPageState extends State<SignUpPage> {
         child: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          color: Color(0xff070024),
+          color: darkBlue,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
