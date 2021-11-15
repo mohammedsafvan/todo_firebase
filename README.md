@@ -1,18 +1,9 @@
 # todo_firebase
 
-A new Flutter project.
+A simple Todo app with Firebase
 
-## Getting Started
+<img src="images/1.jpg" alt="" width="200"/>  <img src="images/2.jpg" alt="" width="200"/> <img src="images/3.jpg" alt="" width="200"/><img src="images/4.jpg" alt="" width="200"/>
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
+## Credits 
 <div>Icons made by <a href="https://www.flaticon.com/authors/andinur" title="andinur">andinur</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
