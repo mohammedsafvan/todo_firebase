@@ -119,38 +119,6 @@ class _HomePageState extends State<HomePage> {
         });
   }
 
-  BottomAppBar _builBottomAppBar() {
-    return BottomAppBar(
-      notchMargin: 8,
-      shape: const CircularNotchedRectangle(),
-      color: lightBlue,
-      child: Padding(
-        padding: const EdgeInsets.all(5.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.home_rounded,
-                color: Colors.white,
-                size: 36,
-              ),
-            ),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.settings_rounded,
-                color: Colors.white,
-                size: 36,
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
   AppBar _buildHomePageAppBar() {
     return AppBar(
       backgroundColor: Colors.transparent,

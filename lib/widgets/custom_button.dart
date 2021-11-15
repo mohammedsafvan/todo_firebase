@@ -13,7 +13,7 @@ Widget customButton(String imgPath, String buttonText, double size,
           borderRadius: BorderRadius.circular(15),
           side: const BorderSide(width: 1, color: Colors.grey),
         ),
-        color: Color(0xff070024),
+        color: const Color(0xff070024),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
