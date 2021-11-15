@@ -45,9 +45,9 @@ class AuthClass {
 
   /// For storing the [uid]&[userCredential] to the flutter_secure_storage
   Future<void> storeUserData(UserCredential userCredential) async {
-    await storage.write(key: "uid", value: userCredential.user!.uid.toString());
+    await storage.write(key: 'uid', value: userCredential.user!.uid.toString());
     await storage.write(
-        key: "usercredential", value: userCredential.toString());
+        key: 'usercredential', value: userCredential.toString());
   }
 
   /// It will return the [uid] from flutter_secure_storage
@@ -74,18 +74,18 @@ class AuthClass {
     PhoneCodeSent codeSent;
 
     verificationCompleted = (PhoneAuthCredential phoneAuthCredential) async =>
-        showSnackBar(context, "Verification Completed");
+        showSnackBar(context, 'Verification Completed');
 
     verificationFailed = (FirebaseAuthException exception) =>
         showSnackBar(context, exception.toString());
 
     codeSent = (String verificationId, [int? forceResendingToken]) {
-      showSnackBar(context, "Verification code sent");
+      showSnackBar(context, 'Verification code sent');
       setData(verificationId);
     };
 
     codeAutoRetrievalTimeout =
-        (String verificationId) => showSnackBar(context, "Time Out");
+        (String verificationId) => showSnackBar(context, 'Time Out');
 
     try {
       await _auth.verifyPhoneNumber(

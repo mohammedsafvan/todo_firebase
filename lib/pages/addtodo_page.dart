@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:todo_firebase/services/auth_service.dart';
 import '../colors.dart';
 
 class AddTodoPage extends StatefulWidget {
@@ -13,6 +12,7 @@ class AddTodoPage extends StatefulWidget {
 }
 
 class _AddTodoPageState extends State<AddTodoPage> {
+  final uid = FirebaseAuth.instance.currentUser!.uid;
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _desriptionController = TextEditingController();
   String category = '';
@@ -123,22 +123,24 @@ class _AddTodoPageState extends State<AddTodoPage> {
 
   InkWell addTaskButton(BuildContext context) {
     return InkWell(
-      onTap: () async{
-        AuthClass _authClass = AuthClass();
-        final uid = await _authClass.getUid();
+      onTap: () async {
         if (_titleController.text != '') {
           if (type != '' && category != '') {
-            FirebaseFirestore.instance
-                .collection('todo')
-                .doc(uid)
-                .collection('userTodos')
-                .add({
-              'title': _titleController.text,
-              'type': type,
-              'description': _desriptionController.text,
-              'category': category
-            });
-            Navigator.of(context).pop();
+            if (_titleController.text.length <= 28) {
+              FirebaseFirestore.instance.collection(uid).add({
+                'title': _titleController.text,
+                'type': type,
+                'description': _desriptionController.text,
+                'category': category,
+                'check': false,
+                'created_date': DateTime.now()
+              });
+              Navigator.of(context).pop();
+            } else {
+              const snackBar =
+                  SnackBar(content: Text('Not more than 28 chars in title'));
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            }
           } else {
             const snackBar =
                 SnackBar(content: Text('Please select type and category'));

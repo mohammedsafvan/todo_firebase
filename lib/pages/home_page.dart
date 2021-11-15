@@ -1,8 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:todo_firebase/pages/pages.dart';
+import 'package:todo_firebase/services/auth_service.dart';
 import '../colors.dart';
-import '../widgets/todo_card.dart';
+import '../widgets/widgets.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -13,77 +17,35 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final AuthClass _authClass = AuthClass();
+  String uid = '';
+  late final Stream<QuerySnapshot> _stream;
+
+  @override
+  void initState() {
+    uid = FirebaseAuth.instance.currentUser!.uid;
+    _stream = FirebaseFirestore.instance
+        .collection(uid)
+        .orderBy(
+          'check',
+        )
+        .snapshots();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: darkBlue,
       appBar: _buildHomePageAppBar(),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: Column(
-            children: [
-              TodoCard(
-                title: 'Let\'s water the plants',
-                icon: Icons.yard_rounded,
-                time: '11PM',
-                type: "Important",
-                check: false,
-              ),
-              TodoCard(
-                title: 'Let\'s water the plants',
-                icon: Icons.yard_rounded,
-                time: '11PM',
-                type: 'Planned',
-                check: true,
-              ),
-              TodoCard(
-                title: 'Let\'s water the plants',
-                icon: Icons.yard_rounded,
-                time: '11PM',
-                type: "Important",
-                check: false,
-              ),
-              TodoCard(
-                title: 'Let\'s water the plants',
-                icon: Icons.yard_rounded,
-                time: '11PM',
-                type: 'Planned',
-                check: true,
-              ),
-              TodoCard(
-                title: 'Let\'s water the plants',
-                icon: Icons.yard_rounded,
-                time: '11PM',
-                type: 'Planned',
-                check: false,
-              ),
-              TodoCard(
-                title: 'Let\'s water the plants',
-                icon: Icons.yard_rounded,
-                time: '11PM',
-                type: "Important",
-                check: false,
-              ),
-              TodoCard(
-                title: 'Let\'s water the plants',
-                icon: Icons.yard_rounded,
-                time: '11PM',
-                type: "Important",
-                check: true,
-              ),
-            ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: _builBottomAppBar(),
+      body: _buildTodos(),
+      // bottomNavigationBar: _builBottomAppBar(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xff6cf8a9),
+        backgroundColor: accentGreen,
         onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (builder) => AddTodoPage()));
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (builder) => const AddTodoPage()));
         },
         child: const Icon(
           Icons.add_rounded,
@@ -91,8 +53,70 @@ class _HomePageState extends State<HomePage> {
           color: Colors.black,
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
+  }
+
+  StreamBuilder<QuerySnapshot<Object?>> _buildTodos() {
+    return StreamBuilder(
+        stream: _stream,
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: SizedBox(
+                height: 50,
+                width: 50,
+                child: CircularProgressIndicator(
+                  color: accentGreen,
+                ),
+              ),
+            );
+          } else if (snapshot.data!.docs.isEmpty) {
+            return Center(
+              child: Lottie.network(
+                  'https://assets10.lottiefiles.com/packages/lf20_7zotccpl.json'),
+            );
+          } else {
+            return ListView.builder(
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  IconData icon;
+                  Map<String, dynamic> document =
+                      snapshot.data!.docs[index].data() as Map<String, dynamic>;
+                  switch (document['category']) {
+                    case 'Work':
+                      icon = Icons.work_rounded;
+                      break;
+                    case 'Food':
+                      icon = Icons.food_bank_rounded;
+                      break;
+                    case 'Workout':
+                      icon = Icons.sports_rounded;
+                      break;
+                    case 'Home':
+                      icon = Icons.home_rounded;
+                      break;
+                    case 'Study':
+                      icon = Icons.book_rounded;
+                      break;
+                    case 'Personal':
+                      icon = Icons.person_rounded;
+                      break;
+                    default:
+                      icon = Icons.access_alarm_rounded;
+                  }
+                  return TodoCard(
+                    uid: uid,
+                    id: snapshot.data!.docs[index].id,
+                    title: document['title'],
+                    type: document['type'],
+                    icon: icon,
+                    // time: '22pm',
+                    time: '',
+                    check: document['check'] ?? false,
+                  );
+                });
+          }
+        });
   }
 
   BottomAppBar _builBottomAppBar() {
@@ -130,58 +154,32 @@ class _HomePageState extends State<HomePage> {
   AppBar _buildHomePageAppBar() {
     return AppBar(
       backgroundColor: Colors.transparent,
-      title: const Text(
-        'Today\'s schedule',
-        style: TextStyle(
+      title: Text(
+        '${DateFormat('EEEE').format(DateTime.now())} ${DateTime.now().day}',
+        style: const TextStyle(
           fontSize: 34,
           fontWeight: FontWeight.bold,
           color: Colors.white,
         ),
       ),
-      actions: const [
-        CircleAvatar(
-          backgroundImage: AssetImage('assets/avatar.png'),
+      actions: [
+        InkWell(
+          onTap: () {
+            _authClass.logOut(context);
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (ctx) => const SignInPage()),
+                (route) => false);
+          },
+          child: const CircleAvatar(
+            backgroundImage: AssetImage(
+              'assets/avatar.png',
+            ),
+          ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 20,
         )
       ],
-      bottom: PreferredSize(
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Column(
-                children: const [
-                  Text(
-                    'Wednesday 10',
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  )
-                ],
-              ),
-            ),
-          ),
-          preferredSize: const Size.fromHeight(35)),
     );
   }
 }
-
-
-
-/// For future use
-/// IconButton(
-//   icon: const Icon(Icons.logout),
-//   onPressed: () {
-//     _authClass.logOut(context);
-//     Navigator.of(context).pushAndRemoveUntil(
-//         MaterialPageRoute(builder: (ctx) => const SignInPage()),
-//         (route) => false);
-//   },
-// ),

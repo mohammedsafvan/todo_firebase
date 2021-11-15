@@ -106,6 +106,7 @@ class _SignInPageState extends State<SignInPage> {
           });
           UserCredential user = await _auth.signInWithEmailAndPassword(
               email: _emailController.text, password: _passwordController.text);
+
           setState(() {
             isLoading = false;
           });
@@ -127,8 +128,7 @@ class _SignInPageState extends State<SignInPage> {
         decoration: BoxDecoration(
             border: Border.all(color: Colors.white),
             borderRadius: BorderRadius.circular(15),
-            color: const Color(0xff070024)
-            ),
+            color: const Color(0xff070024)),
         child: Center(
           child: isLoading
               ? const CircularProgressIndicator()

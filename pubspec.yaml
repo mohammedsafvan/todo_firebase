@@ -17,6 +17,8 @@ dependencies:
   flutter_secure_storage: ^4.2.1
   flutter_otp_text_field: ^1.0.0
   cloud_firestore: ^3.1.0
+  lottie: ^1.2.1
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
@@ -29,10 +31,10 @@ flutter:
     - assets/
   #   - images/a_dot_ham.jpeg
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  fonts:
+    - family: Larke neue
+      fonts:
+        - asset: assets/Larke Neue Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

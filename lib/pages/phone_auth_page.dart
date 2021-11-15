@@ -24,10 +24,9 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:darkBlue,
+      backgroundColor: darkBlue,
       appBar: AppBar(
         elevation: 0,
-        
         backgroundColor: Colors.transparent,
         title: const Text(
           'Sign Up',
@@ -192,6 +191,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
           sendText = 'Resend';
           start = 30;
         });
+        
       } else {
         if (mounted) {
           setState(() {
